@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RZDX Roofing Agency | Roof Replacement, Storm Repair & Free Drone Inspections</title>
+<meta name="color-scheme" content="light">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script>
+tailwind.config={theme:{extend:{colors:{dark:'#0F172A',slate2:'#1E293B',brand:'#EA580C',amber2:'#F97316',paper:'#F8FAFC'},fontFamily:{sans:['Inter','system-ui','sans-serif'],display:['"Plus Jakarta Sans"','system-ui','sans-serif']}}}}
+</script>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-behavior:smooth;scroll-padding-top:6rem}
+body{background:#F8FAFC;color:#334155;font-family:Inter,system-ui,sans-serif}
+h1,h2,h3,h4{font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:#0F172A;letter-spacing:-.02em}
+[x-cloak]{display:none!important}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;border-radius:.75rem;padding:.9rem 1.5rem;font:700 1rem 'Plus Jakarta Sans',sans-serif;transition:transform .25s,background .25s,box-shadow .25s}
+.btn:active{transform:scale(.96)}
+.btn:focus-visible,a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[role=slider]:focus-visible{outline:3px solid #F97316;outline-offset:2px}
+.btn-p{background:#EA580C;color:#fff;box-shadow:0 10px 25px -8px rgba(234,88,12,.6)}
+.btn-p:hover{background:#F97316;transform:translateY(-2px)}
+.btn-g{border:1px solid rgba(255,255,255,.35);color:#fff;background:rgba(255,255,255,.06)}
+.btn-g:hover{background:#fff;color:#0F172A;transform:translateY(-2px)}
+.inp{width:100%;border:1px solid #cbd5e1;border-radius:.75rem;background:#fff;padding:.75rem 1rem;color:#0F172A}
+.inp:focus{border-color:#EA580C;box-shadow:0 0 0 4px rgba(249,115,22,.2);outline:none}
+.rv{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;transition-delay:var(--d,0s)}
+.rv.in{opacity:1;transform:none}
+.glass{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+@keyframes fl{50%{transform:translateY(-10px)}}
+.fl{animation:fl 6s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.fl{animation:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body x-data="site()" x-init="init()">
+
+<!-- Reusable roof illustrations (swap for real photos later) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+<pattern id="shg" width="18" height="12" patternUnits="userSpaceOnUse"><path d="M0 11.5h18M9 0v12" stroke="#000" stroke-opacity=".22" fill="none"/></pattern>
+<pattern id="seam" width="16" height="10" patternUnits="userSpaceOnUse"><path d="M0 0v10" stroke="#000" stroke-opacity=".3" stroke-width="2"/></pattern>
+<symbol id="house" viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice">
+<rect width="400" height="250" fill="var(--sky,#fdba74)"/>
+<circle cx="320" cy="60" r="44" fill="#fff" opacity=".35"/>
+<rect y="200" width="400" height="50" fill="var(--grass,#334155)"/>
+<rect x="90" y="140" width="220" height="64" fill="var(--wall,#e2e8f0)"/>
+<rect x="115" y="158" width="34" height="46" fill="#0F172A" opacity=".7"/><rect x="250" y="158" width="34" height="30" fill="#0F172A" opacity=".7"/>
+<rect x="250" y="60" width="26" height="50" fill="var(--wall,#e2e8f0)" stroke="#0F172A" stroke-opacity=".2"/>
+<polygon points="60,145 200,40 340,145" fill="var(--roof,#1E293B)"/>
+<polygon points="60,145 200,40 340,145" fill="url(#shg)"/>
+<polygon points="60,145 200,40 340,145" fill="none" stroke="#000" stroke-opacity=".35" stroke-width="3"/>
+</symbol>
+<symbol id="metal" viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice">
+<rect width="400" height="250" fill="var(--sky,#94a3b8)"/>
+<rect y="200" width="400" height="50" fill="var(--grass,#334155)"/>
+<rect x="70" y="150" width="260" height="54" fill="var(--wall,#e2e8f0)"/>
+<polygon points="40,150 200,60 360,150" fill="var(--roof,#0f172a)"/>
+<polygon points="40,150 200,60 360,150" fill="url(#seam)"/>
+</symbol>
+<symbol id="flat" viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice">
+<rect width="400" height="250" fill="var(--sky,#bae6fd)"/>
+<rect x="60" y="70" width="280" height="140" fill="var(--wall,#475569)"/>
+<g fill="#cbd5e1" opacity=".5"><rect x="80" y="100" width="30" height="24"/><rect x="130" y="100" width="30" height="24"/><rect x="180" y="100" width="30" height="24"/><rect x="230" y="100" width="30" height="24"/><rect x="280" y="100" width="30" height="24"/></g>
+<rect x="50" y="52" width="300" height="20" fill="var(--roof,#f1f5f9)"/>
+<rect x="150" y="38" width="40" height="14" fill="#94a3b8"/>
+<rect y="210" width="400" height="40" fill="#334155"/>
+</symbol>
+<symbol id="damage" viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice">
+<polygon points="150,80 200,50 215,95 170,110" fill="#1e3a8a" opacity=".85"/>
+<path d="M150 80L170 110M200 50L215 95" stroke="#93c5fd" stroke-width="2"/>
+<g fill="#0b1220" opacity=".7"><rect x="110" y="115" width="26" height="14"/><rect x="235" y="105" width="30" height="14"/><rect x="260" y="125" width="22" height="12"/><rect x="180" y="125" width="28" height="12"/></g>
+<g stroke="#fff" stroke-opacity=".45" stroke-width="1.5"><path d="M40 20l-8 24M90 5l-8 24M150 25l-8 24M300 10l-8 24M350 40l-8 24M240 30l-8 24"/></g>
+</symbol>
+</defs>
+</svg>
+
+<!-- Utility bar -->
+<div class="bg-dark text-xs text-slate-300 sm:text-sm">
+ <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-2 sm:px-6 lg:px-8">
+  <a href="tel:+15550197390" class="flex items-center gap-2 font-semibold text-white hover:text-amber2">
+   <span class="relative flex h-2.5 w-2.5"><span class="absolute h-full w-full animate-ping rounded-full bg-red-500 opacity-75"></span><span class="relative h-2.5 w-2.5 rounded-full bg-red-500"></span></span>
+   24/7 Emergency Storm Response: <span class="text-amber2">(555) 019-7390</span>
+  </a>
+  <span class="hidden md:block">Licensed, bonded and insured. Lic. #RZDX-000000</span>
+ </div>
+</div>
+
+<!-- Navbar -->
+<header class="sticky top-0 z-50 border-b border-white/10 backdrop-blur-xl transition" :class="scrolled?'bg-dark/90 shadow-xl':'bg-dark/70'" @scroll.window="scrolled=scrollY>40">
+ <nav class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8" aria-label="Main">
+  <a href="#home" class="flex items-center gap-3">
+   <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand text-white"><svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-8 9 8"/><path d="M6 11v8h12v-8"/><path d="M9 19v-5h6v5"/></svg></span>
+   <span class="font-display leading-none text-white"><span class="block text-lg font-extrabold">RZDX</span><span class="block text-[10px] font-semibold tracking-widest text-amber2">ROOFING AGENCY</span></span>
+  </a>
+  <ul class="hidden items-center gap-8 lg:flex">
+   <template x-for="l in nav" :key="l[1]"><li><a :href="'#'+l[1]" class="text-sm font-semibold text-slate-200 transition hover:text-amber2" :class="page===l[1]&&'!text-amber2'" x-text="l[0]"></a></li></template>
+  </ul>
+  <div class="flex items-center gap-2">
+   <a href="#estimate" class="btn btn-p hidden !px-5 !py-2.5 text-sm sm:inline-flex">Get a free estimate</a>
+   <button class="rounded-lg p-2 text-white lg:hidden" @click="menu=!menu" :aria-expanded="menu" aria-label="Menu"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  </div>
+ </nav>
+ <div x-show="menu" x-cloak x-transition class="border-t border-white/10 px-4 py-3 lg:hidden">
+  <template x-for="l in nav" :key="l[1]"><a :href="'#'+l[1]" @click="menu=false" class="block rounded-lg px-3 py-3 font-semibold text-slate-200 hover:bg-white/10" x-text="l[0]"></a></template>
+ </div>
+</header>
+
+<main id="top">
+<!-- Hero -->
+<section x-show="page==='home'" class="relative isolate overflow-hidden bg-dark">
+ <svg id="heroimg" class="absolute inset-0 -z-10 h-full w-full" style="--sky:#7c2d12;--grass:#0f172a;--wall:#cbd5e1;--roof:#1E293B" aria-hidden="true"><use href="#house"/></svg>
+ <div class="absolute inset-0 -z-10 bg-gradient-to-r from-dark via-dark/85 to-dark/30"></div>
+ <div class="absolute inset-0 -z-10 bg-gradient-to-t from-dark via-transparent to-dark/40"></div>
+ <div class="mx-auto grid max-w-7xl items-center gap-12 px-4 pb-36 pt-20 sm:px-6 lg:grid-cols-12 lg:px-8 lg:pb-44 lg:pt-28">
+  <div class="lg:col-span-7">
+   <p class="inline-block rounded-full border border-orange-400/40 bg-orange-500/10 px-4 py-1.5 text-sm font-semibold text-orange-300 rv">Premier roofing contractors</p>
+   <h1 class="rv mt-6 text-4xl font-extrabold leading-[1.05] text-white sm:text-5xl lg:text-7xl" style="--d:.1s">Roofs built to outlast every storm.</h1>
+   <p class="rv mt-6 max-w-xl text-lg leading-relaxed text-slate-300" style="--d:.2s">Precision installation, transparent pricing and a 25-year workmanship warranty. Most roofs are finished in 1 to 2 days by a licensed, insured crew.</p>
+   <div class="rv mt-9 flex flex-col gap-3 sm:flex-row" style="--d:.3s">
+    <a href="#estimate" class="btn btn-p">Schedule free drone inspection</a>
+    <a href="#projects" class="btn btn-g">View recent projects</a>
+   </div>
+   <div class="mt-10 flex flex-wrap gap-3 lg:hidden"><span class="glass rounded-full px-4 py-2 text-xs font-bold text-white">GAF Master Elite</span><span class="glass rounded-full px-4 py-2 text-xs font-bold text-white">25-year warranty</span><span class="glass rounded-full px-4 py-2 text-xs font-bold text-white">4.9★ Google</span></div>
+  </div>
+  <div class="hidden lg:col-span-5 lg:flex lg:flex-col lg:items-end lg:gap-5">
+   <div class="glass fl w-72 rounded-2xl p-5"><p class="font-display text-lg font-extrabold text-white">GAF Master Elite</p><p class="text-xs text-slate-300">Top 2% of roofers (sample badge)</p></div>
+   <div class="glass fl mr-10 w-72 rounded-2xl p-5" style="animation-delay:-2s"><p class="font-display text-lg font-extrabold text-white">25-year workmanship warranty</p><p class="text-xs text-slate-300">Written and transferable</p></div>
+   <div class="glass fl w-72 rounded-2xl p-5" style="animation-delay:-4s"><p class="text-xl text-amber2">★★★★★</p><p class="font-display text-lg font-extrabold text-white">4.9★ Google rating</p></div>
+  </div>
+ </div>
+</section>
+
+<!-- Stats -->
+<section x-show="page==='home'" class="relative z-10 -mt-16 px-4 sm:px-6 lg:px-8">
+ <div class="mx-auto grid max-w-6xl grid-cols-2 gap-px overflow-hidden rounded-2xl bg-slate-200 shadow-2xl lg:grid-cols-4">
+  <template x-for="s in stats" :key="s.l"><div class="bg-white px-6 py-8 text-center"><p class="font-display text-4xl font-extrabold text-dark sm:text-5xl"><span :data-c="s.v" :data-d="s.d">0</span><span class="text-brand" x-text="s.s"></span></p><p class="mt-2 text-sm font-semibold text-slate-500" x-text="s.l"></p></div></template>
+ </div>
+</section>
+
+<!-- Before / After -->
+<section x-show="page==='home'" class="py-24"><div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+ <div class="mx-auto max-w-2xl text-center rv"><h2 class="text-3xl font-extrabold sm:text-5xl">Drag to see the RZDX difference</h2><p class="mt-4 text-slate-600">Slide across to compare a storm-damaged roof with a new RZDX installation.</p></div>
+ <div x-ref="ba" class="rv relative mt-12 aspect-[16/10] w-full cursor-ew-resize select-none overflow-hidden rounded-3xl bg-slate-800 shadow-2xl" style="touch-action:pan-y"
+   @pointerdown="drag=true;mv($event);$el.setPointerCapture($event.pointerId)" @pointermove="drag&&mv($event)" @pointerup="drag=false" @pointercancel="drag=false">
+  <svg class="pointer-events-none absolute inset-0 h-full w-full" style="--sky:#fdba74;--roof:#1E293B;--wall:#f1f5f9;--grass:#166534" role="img" aria-label="New RZDX roof"><use href="#house"/></svg>
+  <div class="pointer-events-none absolute inset-0" :style="`clip-path:inset(0 ${100-pos}% 0 0)`">
+   <svg class="absolute inset-0 h-full w-full" style="--sky:#64748b;--roof:#6b5b4b;--wall:#cbd5e1;--grass:#3f3f46" role="img" aria-label="Storm-damaged roof"><use href="#house"/><use href="#damage"/></svg>
+  </div>
+  <span class="pointer-events-none absolute left-4 top-4 rounded-full bg-black/60 px-4 py-1.5 text-xs font-bold text-white">Before: storm damage</span>
+  <span class="pointer-events-none absolute right-4 top-4 rounded-full bg-brand px-4 py-1.5 text-xs font-bold text-white">After: RZDX roof</span>
+  <div class="pointer-events-none absolute inset-y-0 w-0.5 bg-white" :style="`left:${pos}%`">
+   <div role="slider" tabindex="0" aria-label="Before and after" :aria-valuenow="Math.round(pos)" aria-valuemin="0" aria-valuemax="100" @keydown.arrow-left.prevent="pos=Math.max(0,pos-3)" @keydown.arrow-right.prevent="pos=Math.min(100,pos+3)"
+     class="pointer-events-auto absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-4 border-white bg-brand text-xl font-bold text-white shadow-xl transition-transform" :class="drag&&'scale-110'">↔</div>
+  </div>
+ </div>
+</div></section>
+
+<!-- Services -->
+<section x-show="page!=='home'" x-cloak class="bg-dark pb-16 pt-14"><div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"><p class="text-sm font-semibold text-amber2">RZDX Roofing Agency</p><h1 class="mt-2 text-4xl font-extrabold !text-white sm:text-6xl" x-text="titles[page]"></h1><p class="mt-4 max-w-2xl text-lg text-slate-300" x-text="subs[page]"></p></div></section>
+<section x-show="page==='services'" x-cloak id="services" class="bg-white py-24"><div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+ <h2 class="rv max-w-2xl text-3xl font-extrabold sm:text-5xl">Complete roofing services, one accountable team</h2>
+ <div class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+  <template x-for="(s,i) in services" :key="s.t">
+   <article class="rv group relative overflow-hidden rounded-2xl border border-slate-200 bg-paper p-8 transition duration-500 hover:-translate-y-2 hover:border-brand/40 hover:bg-white hover:shadow-2xl" :style="`--d:${(i%3)*.12}s`">
+    <span class="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 bg-brand transition-transform duration-500 group-hover:scale-x-100"></span>
+    <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-dark text-2xl text-amber2 transition duration-500 group-hover:rotate-6 group-hover:bg-brand group-hover:text-white" x-text="s.i"></div>
+    <h3 class="mt-6 text-xl font-bold" x-text="s.t"></h3>
+    <p class="mt-3 leading-relaxed text-slate-600" x-text="s.x"></p>
+    <a href="#estimate" class="mt-6 inline-block text-sm font-bold text-brand">Get a quote</a>
+   </article>
+  </template>
+  <article class="rv relative flex flex-col justify-between overflow-hidden rounded-2xl bg-gradient-to-br from-dark to-slate2 p-8" style="--d:.24s">
+   <div><h3 class="text-xl font-bold !text-white">Not sure what you need?</h3><p class="mt-3 text-slate-300">Let our drone inspection tell you. It’s free and there’s no pressure.</p></div>
+   <a href="#estimate" class="btn btn-p mt-8">Get a free roof inspection</a>
+  </article>
+ </div>
+</div></section>
+
+<!-- Projects -->
+<section x-show="page==='projects'" x-cloak id="projects" class="py-24"><div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+ <div class="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
+  <h2 class="rv text-3xl font-extrabold sm:text-5xl">Recent projects</h2>
+  <div class="flex flex-wrap gap-2" role="tablist">
+   <template x-for="c in cats" :key="c"><button role="tab" :aria-selected="filter===c" @click="filter=c" class="rounded-full border border-slate-200 px-5 py-2.5 text-sm font-bold transition active:scale-95" :class="filter===c?'bg-dark text-white shadow-lg':'bg-white text-slate-600 hover:bg-slate-100'" x-text="c"></button></template>
+  </div>
+ </div>
+ <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+  <template x-for="p in projects" :key="p.t">
+   <article x-show="filter==='All'||filter===p.c" x-transition:enter="transition duration-500" x-transition:enter-start="opacity-0 translate-y-6 scale-95" x-transition:enter-end="opacity-100 translate-y-0 scale-100" class="group overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-slate-200 transition duration-500 hover:-translate-y-2 hover:shadow-2xl">
+    <div class="relative aspect-[4/3] overflow-hidden">
+     <svg class="h-full w-full transition duration-700 group-hover:scale-110" :style="p.st" role="img" :aria-label="p.t"><use :href="'#'+p.sym"/></svg>
+     <span class="absolute left-3 top-3 rounded-full bg-brand px-3 py-1 text-[11px] font-bold text-white" x-text="p.c"></span>
+    </div>
+    <div class="p-5"><h3 class="text-lg font-bold" x-text="p.t"></h3>
+     <dl class="mt-3 space-y-1.5 text-sm"><div class="flex gap-2"><dt class="w-16 shrink-0 text-slate-400">Location</dt><dd x-text="p.l"></dd></div><div class="flex gap-2"><dt class="w-16 shrink-0 text-slate-400">Material</dt><dd x-text="p.m"></dd></div><div class="flex gap-2"><dt class="w-16 shrink-0 text-slate-400">Finished</dt><dd class="font-bold text-brand" x-text="p.d"></dd></div></dl>
+    </div>
+   </article>
+  </template>
+ </div>
+</div></section>
+
+<!-- Process -->
+<section x-show="page==='services'" x-cloak id="process" class="bg-dark py-24"><div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+ <div class="rv mx-auto max-w-2xl text-center"><h2 class="text-3xl font-extrabold !text-white sm:text-5xl">The RZDX 4-step process</h2><p class="mt-4 text-slate-400">From first call to final warranty, clear and predictable.</p></div>
+ <div class="relative mt-20">
+  <div class="absolute left-[12.5%] right-[12.5%] top-8 hidden h-0.5 bg-white/10 lg:block"><div id="tl" class="h-full origin-left bg-brand" style="transform:scaleX(0);transition:transform 1.8s ease"></div></div>
+  <ol class="relative grid gap-12 lg:grid-cols-4 lg:gap-8">
+   <template x-for="(s,i) in steps" :key="s.t"><li class="rv flex gap-6 lg:block lg:text-center" :style="`--d:${i*.15}s`">
+    <div class="relative z-10 flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-brand font-display text-xl font-extrabold text-white ring-8 ring-dark lg:mx-auto" x-text="i+1"></div>
+    <div class="lg:mt-6"><h3 class="text-lg font-bold !text-white" x-text="s.t"></h3><p class="mt-2 text-sm leading-relaxed text-slate-400" x-text="s.x"></p></div>
+   </li></template>
+  </ol>
+ </div>
+</div></section>
+
+<!-- Estimate -->
+<section x-show="page==='contact'" x-cloak id="estimate" class="bg-gradient-to-b from-paper to-slate-200 py-24"><div class="mx-auto grid max-w-7xl gap-14 px-4 sm:px-6 lg:grid-cols-12 lg:px-8">
+ <div class="rv lg:col-span-5">
+  <h2 class="text-3xl font-extrabold sm:text-5xl">Get your free roof inspection and quote</h2>
+  <p class="mt-5 text-lg text-slate-600">Answer three quick steps. A specialist will call within one business hour.</p>
+  <ul class="mt-8 space-y-3 font-semibold text-slate-700"><li>✓ Free drone and 21-point inspection</li><li>✓ Itemised digital quote, no hidden fees</li><li>✓ Insurance claim guidance included</li><li>✓ 25-year workmanship warranty</li></ul>
+  <a href="tel:+15550197390" class="mt-10 inline-block rounded-2xl bg-dark p-5 text-white shadow-xl transition hover:-translate-y-1"><span class="block text-xs font-bold text-red-300">Emergency? Call 24/7</span><span class="block font-display text-2xl font-extrabold">(555) 019-7390</span></a>
+ </div>
+ <div class="rv lg:col-span-7"><div class="rounded-3xl bg-white p-6 shadow-2xl ring-1 ring-slate-200 sm:p-10">
+  <div x-show="done" x-cloak class="py-10 text-center">
+   <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100 text-4xl text-emerald-600">✓</div>
+   <h3 class="mt-6 text-2xl font-extrabold">Request received</h3>
+   <p class="mx-auto mt-3 max-w-md text-slate-600" x-text="f.urgency==='Emergency (24/7)'?`Thanks ${f.name}. We flagged this as an emergency. A specialist will call you shortly. If water is entering your home now, call (555) 019-7390.`:`Thanks ${f.name}. A roofing specialist will contact you within 1 business hour to schedule your free drone inspection.`"></p>
+   <button class="mt-6 text-sm font-bold text-brand" @click="reset()">Send another request</button>
+  </div>
+  <form x-show="!done" @submit.prevent="submit()" novalidate>
+   <div class="mb-8"><div class="flex justify-between text-sm font-semibold text-slate-500"><span>Step <span x-text="step"></span> of 3</span><span x-text="['Property','Roof details','Your info'][step-1]"></span></div>
+    <div class="mt-3 grid grid-cols-3 gap-2"><template x-for="n in 3"><div class="h-1.5 rounded-full transition-all duration-500" :class="step>=n?'bg-brand':'bg-slate-200'"></div></template></div></div>
+   <p x-show="err" x-cloak role="alert" class="mb-4 rounded-lg bg-red-50 px-4 py-3 text-sm font-semibold text-red-600" x-text="err"></p>
+
+   <div x-show="step===1"><h3 class="text-xl font-extrabold">What type of property is it?</h3>
+    <div class="mt-5 grid gap-3 sm:grid-cols-2"><template x-for="o in opts.prop"><button type="button" @click="f.prop=o" class="rounded-xl border-2 px-4 py-4 text-left font-semibold transition hover:-translate-y-0.5" :class="f.prop===o?'border-brand bg-orange-50 shadow-md':'border-slate-200'" x-text="o"></button></template></div></div>
+
+   <div x-show="step===2" x-cloak><h3 class="text-xl font-extrabold">What’s going on with the roof?</h3>
+    <div class="mt-5 grid gap-3 sm:grid-cols-2"><template x-for="o in opts.issue"><button type="button" @click="f.issue=o" class="rounded-xl border-2 px-4 py-3.5 text-left text-sm font-semibold transition hover:-translate-y-0.5" :class="f.issue===o?'border-brand bg-orange-50 shadow-md':'border-slate-200'" x-text="o"></button></template></div>
+    <h3 class="mt-8 text-xl font-extrabold">How urgent is it?</h3>
+    <div class="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4"><template x-for="o in opts.urg"><button type="button" @click="f.urgency=o" class="rounded-xl border-2 px-3 py-3.5 text-center text-sm font-bold transition hover:-translate-y-0.5" :class="f.urgency===o?(o.startsWith('Emergency')?'border-red-500 bg-red-50 text-red-700':'border-brand bg-orange-50'):'border-slate-200'" x-text="o"></button></template></div></div>
+
+   <div x-show="step===3" x-cloak><h3 class="text-xl font-extrabold">Where should we send your quote?</h3>
+    <div class="mt-5 grid gap-4 sm:grid-cols-2">
+     <div><label for="n" class="mb-1.5 block text-sm font-semibold">Full name</label><input id="n" class="inp" x-model="f.name" autocomplete="name" placeholder="Jane Doe"></div>
+     <div><label for="p" class="mb-1.5 block text-sm font-semibold">Phone</label><input id="p" type="tel" class="inp" x-model="f.phone" autocomplete="tel" placeholder="(555) 123-4567"></div>
+     <div><label for="e" class="mb-1.5 block text-sm font-semibold">Email</label><input id="e" type="email" class="inp" x-model="f.email" autocomplete="email" placeholder="you@email.com"></div>
+     <div><label for="z" class="mb-1.5 block text-sm font-semibold">ZIP code</label><input id="z" class="inp" x-model="f.zip" autocomplete="postal-code" placeholder="12345"></div>
+     <div class="sm:col-span-2"><label for="m" class="mb-1.5 block text-sm font-semibold">Notes (optional)</label><textarea id="m" rows="3" class="inp resize-none" x-model="f.msg" placeholder="Describe the damage, roof age, insurance company"></textarea></div>
+    </div></div>
+
+   <div class="mt-8 flex items-center justify-between gap-4">
+    <button type="button" x-show="step>1" @click="err='';step--" class="rounded-xl px-5 py-3 font-bold text-slate-600 hover:bg-slate-100">Back</button><span x-show="step===1"></span>
+    <button type="button" x-show="step<3" @click="next()" class="btn btn-p">Continue</button>
+    <button type="submit" x-show="step===3" x-cloak class="btn btn-p">Get my free estimate</button>
+   </div>
+  </form>
+ </div></div>
+</div></section>
+
+<!-- Reviews -->
+<section x-show="page==='home'" class="bg-paper py-20"><div class="mx-auto grid max-w-7xl gap-6 px-4 sm:px-6 md:grid-cols-3 lg:px-8">
+ <a href="#services" class="rv group rounded-2xl bg-dark p-8 transition hover:-translate-y-2 hover:shadow-2xl"><h3 class="text-xl font-bold !text-white">Our services</h3><p class="mt-3 text-slate-300">Replacement, repair, commercial, gutters and drone inspections.</p><span class="mt-6 inline-block font-bold text-amber2">Explore services</span></a>
+ <a href="#projects" class="rv group rounded-2xl bg-dark p-8 transition hover:-translate-y-2 hover:shadow-2xl" style="--d:.12s"><h3 class="text-xl font-bold !text-white">Recent projects</h3><p class="mt-3 text-slate-300">Browse finished roofs by material and project type.</p><span class="mt-6 inline-block font-bold text-amber2">View projects</span></a>
+ <a href="#contact" class="rv group rounded-2xl bg-brand p-8 transition hover:-translate-y-2 hover:shadow-2xl" style="--d:.24s"><h3 class="text-xl font-bold !text-white">Free estimate</h3><p class="mt-3 text-orange-50">Book your free drone inspection in three quick steps.</p><span class="mt-6 inline-block font-bold text-white">Get started</span></a>
+</div></section>
+<section x-show="page==='home'||page==='projects'" x-cloak id="reviews" class="bg-white py-24"><div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+ <h2 class="rv mx-auto max-w-2xl text-center text-3xl font-extrabold sm:text-5xl">Trusted by homeowners like you</h2>
+ <div class="mt-14 grid gap-6 md:grid-cols-3">
+  <template x-for="(t,i) in reviews" :key="t.n"><figure class="rv rounded-2xl border border-slate-200 bg-paper p-8 transition duration-500 hover:-translate-y-2 hover:shadow-xl" :style="`--d:${i*.15}s`">
+   <p class="text-xl text-amber2">★★★★★</p><blockquote class="mt-5 leading-relaxed text-slate-700" x-text="'“'+t.x+'”'"></blockquote>
+   <figcaption class="mt-6 flex items-center gap-3"><span class="flex h-11 w-11 items-center justify-center rounded-full bg-dark font-bold text-white" x-text="t.n[0]"></span><span><span class="block font-bold text-dark" x-text="t.n"></span><span class="text-xs text-slate-500" x-text="'Verified homeowner, '+t.l"></span></span></figcaption>
+  </figure></template>
+ </div>
+ <p class="mt-8 text-center text-xs text-slate-400">Sample reviews. Replace with your real customer feedback before launch.</p>
+</div></section>
+
+<!-- FAQ -->
+<section x-show="page==='contact'||page==='services'" x-cloak id="faq" class="py-24"><div class="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-12 lg:px-8">
+ <div class="rv lg:col-span-4"><h2 class="text-3xl font-extrabold sm:text-4xl">Questions? We’ve got answers.</h2><p class="mt-4 text-slate-600">Need more? Call <a href="tel:+15550197390" class="font-bold text-brand">(555) 019-7390</a> any time.</p></div>
+ <div class="space-y-3 lg:col-span-8">
+  <template x-for="(q,i) in faqs" :key="q.q"><div class="overflow-hidden rounded-2xl border bg-white transition" :class="open===i?'border-brand/50 shadow-lg':'border-slate-200'">
+   <h3><button type="button" @click="open=open===i?null:i" :aria-expanded="open===i" class="flex w-full items-center justify-between gap-4 px-6 py-5 text-left font-display text-lg font-bold text-dark"><span x-text="q.q"></span><span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xl transition duration-300" :class="open===i?'rotate-45 bg-brand text-white':'bg-slate-100'">+</span></button></h3>
+   <div x-show="open===i" x-cloak x-transition><p class="px-6 pb-6 leading-relaxed text-slate-600" x-text="q.a"></p></div>
+  </div></template>
+ </div>
+</div></section>
+</main>
+
+<!-- Footer -->
+<footer class="bg-dark pb-28 pt-20 text-slate-300 md:pb-10"><div class="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-12 lg:px-8">
+ <div class="lg:col-span-4"><p class="font-display text-xl font-extrabold text-white">RZDX <span class="text-amber2">ROOFING AGENCY</span></p>
+  <p class="mt-4 max-w-sm text-sm leading-relaxed text-slate-400">Precision roofing engineered to outlast the storm. Residential, commercial and emergency response.</p>
+  <p class="mt-5 text-sm font-semibold text-white">Lic. #RZDX-000000</p><p class="text-sm text-slate-400">Fully insured. Workers’ comp and general liability.</p></div>
+ <div class="grid grid-cols-2 gap-8 lg:col-span-4">
+  <div><h4 class="font-display font-bold text-white">Quick links</h4><ul class="mt-4 space-y-3 text-sm"><template x-for="l in nav" :key="l[1]"><li><a :href="'#'+l[1]" class="hover:text-amber2" x-text="l[0]"></a></li></template><li><a href="#faq" class="hover:text-amber2">FAQ</a></li></ul></div>
+  <div><h4 class="font-display font-bold text-white">Service areas</h4><ul class="mt-4 space-y-3 text-sm"><template x-for="a in areas" :key="a"><li x-text="a"></li></template></ul></div>
+ </div>
+ <div class="lg:col-span-4"><div class="rounded-2xl border border-white/10 bg-slate2 p-6">
+  <h4 class="font-display text-lg font-bold text-white">Emergency callback</h4>
+  <p class="mt-2 text-sm text-slate-400">Leak or storm damage? Leave your number and we’ll call back in minutes.</p>
+  <p x-show="cbDone" x-cloak class="mt-4 rounded-xl bg-emerald-500/15 px-4 py-3 text-sm font-semibold text-emerald-300" x-text="`Got it, ${cb.name}. We’ll call you back within minutes.`"></p>
+  <form x-show="!cbDone" @submit.prevent="callback()" class="mt-4 space-y-3" novalidate>
+   <input class="inp !border-white/10 !bg-dark !text-white" x-model="cb.name" placeholder="Your name" aria-label="Your name">
+   <input type="tel" class="inp !border-white/10 !bg-dark !text-white" x-model="cb.phone" placeholder="Phone number" aria-label="Phone number">
+   <p x-show="cbErr" x-cloak role="alert" class="text-xs text-red-400" x-text="cbErr"></p>
+   <button class="btn btn-p w-full">Call me back now</button>
+  </form>
+ </div></div>
+</div>
+<div class="mx-auto mt-16 flex max-w-7xl flex-col items-center justify-between gap-2 border-t border-white/10 px-4 pt-8 text-xs text-slate-500 sm:px-6 md:flex-row lg:px-8"><p>© 2026 RZDX ROOFING AGENCY. All rights reserved.</p><p>Licensed, bonded and insured</p></div>
+</footer>
+
+<div class="fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 gap-2 border-t border-white/10 bg-dark/95 p-3 backdrop-blur md:hidden" style="padding-bottom:calc(.75rem + env(safe-area-inset-bottom,0px))">
+ <a href="tel:+15550197390" class="btn btn-g !py-3 text-sm">Call now</a><a href="#estimate" class="btn btn-p !py-3 text-sm">Free estimate</a>
+</div>
+
+<script>
+function site(){
+ const store=(k,v)=>{try{const a=JSON.parse(localStorage.getItem(k)||'[]');a.push(v);localStorage.setItem(k,JSON.stringify(a))}catch(e){}};
+ const ok=p=>/^[0-9+\-\s().]{7,30}$/.test(p||'');
+ return{
+  page:'home',scrolled:false,menu:false,
+  titles:{services:'Roofing services',projects:'Recent projects and reviews',contact:'Get your free estimate'},
+  subs:{services:'Residential, commercial and emergency roofing from one accountable crew, with a clear four-step process.',projects:'Finished roofs across our service areas, and what homeowners say about working with us.',contact:'Tell us about your roof. A specialist calls within one business hour, or call us 24/7 for emergencies.'},pos:50,drag:false,filter:'All',open:0,step:1,err:'',done:false,cbDone:false,cbErr:'',
+  f:{prop:'',issue:'',urgency:'',name:'',phone:'',email:'',zip:'',msg:''},cb:{name:'',phone:''},
+  nav:[['Home','home'],['Services','services'],['Projects','projects'],['Contact','contact']],
+  areas:['Downtown & Metro','North Suburbs','South Shore','East Valley','West Hills','Lakeside & Riverside'],
+  cats:['All','Architectural Shingles','Standing Seam Metal','Commercial','Storm Restoration'],
+  opts:{prop:['Single-Family Home','Townhome / Multi-Family','Commercial Building','HOA / Property Manager'],
+   issue:['Storm / Hail Damage','Active Leak','Aging Roof / Full Replacement','New Construction / Upgrade','Gutters / Skylights','Insurance Claim Help'],
+   urg:['Emergency (24/7)','This week','This month','Just researching']},
+  stats:[{v:1500,d:0,s:'+',l:'Roofs installed'},{v:100,d:0,s:'%',l:'Satisfaction focus'},{v:25,d:0,s:' yr',l:'Workmanship warranty'},{v:4.9,d:1,s:'★',l:'Google rating'}],
+  services:[
+   {i:'⌂',t:'Residential roof replacement',x:'Architectural shingle, slate-look and standing seam metal systems, installed in 1 to 2 days with a 25-year workmanship warranty.'},
+   {i:'▦',t:'Commercial flat & TPO roofing',x:'Heat-welded TPO, EPDM and modified bitumen systems with minimal downtime for your business.'},
+   {i:'⚡',t:'24/7 emergency storm & hail repair',x:'Rapid tarping and permanent repairs after wind, hail or fallen trees. Day or night, holidays included.'},
+   {i:'◫',t:'Gutter systems & skylights',x:'Seamless aluminium gutters, leaf guards and leak-proof skylights that protect the roof edge and brighten the home.'},
+   {i:'◎',t:'Drone inspections & insurance claims',x:'High-resolution drone imagery and documented damage reports, plus hands-on help with your claim paperwork.'}],
+  projects:[
+   {c:'Architectural Shingles',t:'Hillcrest Colonial re-roof',l:'North Suburbs',m:'Timberline HDZ, charcoal',d:'2 days',sym:'house',st:'--sky:#fdba74;--roof:#334155;--wall:#e2e8f0;--grass:#166534'},
+   {c:'Standing Seam Metal',t:'Modern Ridge residence',l:'West Hills',m:'24-ga standing seam, matte black',d:'4 days',sym:'metal',st:'--sky:#cbd5e1;--roof:#0f172a;--wall:#f8fafc;--grass:#334155'},
+   {c:'Commercial',t:'Harbor Point office park',l:'South Shore',m:'60-mil TPO, white',d:'6 days',sym:'flat',st:'--sky:#bae6fd;--roof:#f1f5f9;--wall:#475569'},
+   {c:'Storm Restoration',t:'Hailstorm recovery, Oak Lane',l:'East Valley',m:'Class 4 impact-resistant shingle',d:'2 days',sym:'house',st:'--sky:#94a3b8;--roof:#7c2d12;--wall:#e2e8f0;--grass:#3f3f46'},
+   {c:'Architectural Shingles',t:'Lakeview Craftsman',l:'Lakeside',m:'Duration, driftwood',d:'1 day',sym:'house',st:'--sky:#bfdbfe;--roof:#78716c;--wall:#fef3c7;--grass:#15803d'},
+   {c:'Standing Seam Metal',t:'Summit barn-style home',l:'West Hills',m:'Standing seam, burnished slate',d:'5 days',sym:'metal',st:'--sky:#fed7aa;--roof:#475569;--wall:#f1f5f9;--grass:#166534'},
+   {c:'Commercial',t:'Metro retail plaza',l:'Downtown',m:'Fully adhered EPDM',d:'8 days',sym:'flat',st:'--sky:#fde68a;--roof:#1e293b;--wall:#64748b'},
+   {c:'Storm Restoration',t:'Windstorm roof rebuild',l:'Riverside',m:'Architectural shingle + new decking',d:'3 days',sym:'house',st:'--sky:#a5b4fc;--roof:#1f2937;--wall:#e5e7eb;--grass:#14532d'}],
+  steps:[
+   {t:'Free 21-point & drone inspection',x:'We scan every inch of your roof with a drone and a 21-point checklist, then send photo-documented findings.'},
+   {t:'Transparent digital quote & material selection',x:'An itemised quote with no surprises. Choose your shingle or metal colour with our visual selector.'},
+   {t:'Precision 1-to-2 day installation',x:'A dedicated crew tears off, decks, underlays and installs your new system while protecting your landscaping.'},
+   {t:'Magnetic nail sweep & lifetime warranty registration',x:'We sweep your property for stray nails, do a final walkthrough and register your warranty.'}],
+  reviews:[
+   {n:'Marcus T.',l:'North Suburbs',x:'Hail hit on Friday night and RZDX had a tarp on by 7 AM Saturday. They dealt with the adjuster too. New roof done in two days.'},
+   {n:'Priya S.',l:'Lakeside',x:'The drone report showed damage I never could have seen. The quote was clear and the crew left my yard cleaner than they found it.'},
+   {n:'Daniel R.',l:'West Hills',x:'Our standing seam metal roof looks incredible. Professional from the first call to the final nail sweep.'}],
+  faqs:[
+   {q:'Will you help me with my insurance claim?',a:'Yes. We document damage with drone imagery and a detailed report, meet your adjuster on site if you wish, and supply the line-item scope your insurer needs. You stay in control of the claim.'},
+   {q:'What warranties do you offer?',a:'Every installation includes a 25-year workmanship warranty from RZDX plus the manufacturer’s material warranty. Eligible systems can be registered for extended coverage in step four of our process.'},
+   {q:'How long does a roof replacement take?',a:'Most residential roofs take one to two days. Larger homes, metal systems and commercial roofs take longer, and we confirm the schedule in your digital quote.'},
+   {q:'Is the inspection really free?',a:'Yes. The 21-point drone inspection is free with no obligation. You receive photos and a written summary whether or not you hire us.'},
+   {q:'What should I do if my roof is leaking right now?',a:'Move valuables away, put a bucket under the leak and call our 24/7 line. We can usually tarp the damaged area the same day.'}],
+  init(){
+   this.route();addEventListener('hashchange',()=>this.route());
+   const rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');if(e.target.closest('#process'))document.getElementById('tl').style.transform='scaleX(1)';io.unobserve(e.target)}}),{threshold:.15});
+   const co=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const el=e.target,end=+el.dataset.c,d=+el.dataset.d,fmt=v=>v.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
+    if(rm||!window.gsap){el.textContent=fmt(end)}else{const o={v:0};gsap.to(o,{v:end,duration:2.2,ease:'power2.out',onUpdate:()=>el.textContent=fmt(o.v)})}co.unobserve(el)}),{threshold:.6});
+   this.$nextTick(()=>{document.querySelectorAll('.rv').forEach(el=>io.observe(el));document.querySelectorAll('[data-c]').forEach(el=>co.observe(el))});
+   if(!rm&&window.gsap){gsap.fromTo('#heroimg',{scale:1.2},{scale:1.03,duration:2.8,ease:'power3.out'})}
+  },
+  route(){const m={estimate:'contact',contact:'contact',faq:'contact',services:'services',process:'services',projects:'projects'};this.page=m[location.hash.slice(1)]||'home';this.menu=false;scrollTo(0,0)},
+  mv(e){const r=this.$refs.ba.getBoundingClientRect();this.pos=Math.min(100,Math.max(0,(e.clientX-r.left)/r.width*100))},
+  next(){this.err='';
+   if(this.step===1&&!this.f.prop){this.err='Select your property type.';return}
+   if(this.step===2&&(!this.f.issue||!this.f.urgency)){this.err='Choose the roof issue and how urgent it is.';return}
+   this.step++},
+  submit(){const f=this.f;
+   if(f.name.trim().length<2)return this.err='Enter your full name.';
+   if(!ok(f.phone))return this.err='Enter a valid phone number.';
+   if(!/^\S+@\S+\.\S+$/.test(f.email))return this.err='Enter a valid email address.';
+   if(!f.zip.trim())return this.err='Enter your ZIP code.';
+   this.err='';store('rzdx_leads',{...f,at:new Date().toISOString()});this.done=true},
+  reset(){this.f={prop:'',issue:'',urgency:'',name:'',phone:'',email:'',zip:'',msg:''};this.step=1;this.done=false},
+  callback(){if(this.cb.name.trim().length<2)return this.cbErr='Enter your name.';
+   if(!ok(this.cb.phone))return this.cbErr='Enter a valid phone number.';
+   this.cbErr='';store('rzdx_callbacks',{...this.cb,at:new Date().toISOString()});this.cbDone=true}
+ }
+}
+</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
+</body>
+</html>
